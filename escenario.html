@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escenario con Canvas</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        canvas {
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="miCanvas" width="800" height="600"></canvas>
+
+    <script>
+        const canvas = document.getElementById('miCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const colores = {
+            cielo: '#1A1A2E',
+            sol: '#F7C851',
+            estrellas: '#FFFFFF',
+            suelo: '#151522', 
+            montana1: { 
+                principal: '#7A4D9B', 
+                sombra: '#5C3A7A'
+            },
+            montana2: { 
+                principal: '#4A6C9B', 
+                sombra: '#3A557A'
+            },
+            montana3: { 
+                principal: '#9B7A4D', 
+                sombra: '#7A5C3A'
+            },
+            montana4: { 
+                principal: '#8C3B7A', 
+                sombra: '#6B2D5C'
+            },
+            montana5: { 
+                principal: '#2E8B57', 
+                sombra: '#256D44'
+            }
+        };
+
+        function dibujarFondo() {
+            ctx.fillStyle = colores.cielo;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function dibujarEstrellas(cantidad) {
+            ctx.fillStyle = colores.estrellas;
+            for (let i = 0; i < cantidad; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * (canvas.height * 0.7);
+                const radio = Math.random() * 1.5;
+                ctx.beginPath();
+                ctx.arc(x, y, radio, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function dibujarSol() {
+            ctx.fillStyle = colores.sol;
+            ctx.beginPath();
+            ctx.arc(canvas.width * 0.75, canvas.height * 0.25, 80, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function dibujarMontana(baseX, baseHeight, anchura, altura, colorPrincipal, colorSombra) {
+            const picoX = baseX + anchura / 2;
+            const picoY = canvas.height - altura;
+
+            
+            ctx.fillStyle = colorSombra;
+            ctx.beginPath();
+            ctx.moveTo(baseX, canvas.height);
+            ctx.lineTo(picoX, picoY);
+            ctx.lineTo(picoX, canvas.height);
+            ctx.closePath();
+            ctx.fill();
+                
+            ctx.fillStyle = colorPrincipal;
+            ctx.beginPath();
+            ctx.moveTo(baseX + anchura, canvas.height);
+            ctx.lineTo(picoX, picoY);
+            ctx.lineTo(picoX, canvas.height);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function dibujarNombre() {
+            ctx.fillStyle = '#FFFFFF'; 
+            ctx.font = '20px Arial';    
+            ctx.fillText('Francesca Sanguinetti', 20, canvas.height - 20); 
+        }
+        
+        function dibujarEscena() {
+            dibujarFondo();
+            dibujarEstrellas(150);
+            dibujarSol();
+    
+            dibujarMontana(
+                canvas.width * 0.05,  
+                100,
+                700,
+                400,
+                colores.montana1.principal, 
+                colores.montana1.sombra
+            );
+
+            dibujarMontana(
+                0, 
+                100, 
+                450, 
+                300, 
+                colores.montana2.principal, 
+                colores.montana2.sombra
+            );
+ 
+            dibujarMontana(
+                canvas.width * 0.5, 
+                100, 
+                400, 
+                280, 
+                colores.montana3.principal, 
+                colores.montana3.sombra
+            );
+            
+            dibujarMontana(
+                canvas.width * 0.15, 
+                100, 
+                350, 
+                250, 
+                colores.montana4.principal, 
+                colores.montana4.sombra
+            );
+
+            dibujarMontana(
+                canvas.width * 0.6, 
+                100, 
+                300, 
+                220, 
+                colores.montana5.principal, 
+                colores.montana5.sombra
+            );
+
+            dibujarNombre();
+        }
+
+        dibujarEscena();
+
+    </script>
+</body>
+</html>
